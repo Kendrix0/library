@@ -22,29 +22,20 @@
                     <label for="bookAuthor">Author</label>
                     <input type="text" class="form-control" id="bookAuthor">
                 </div>
-    
-                <div class="row">
-                    <div class="col">
-                        <div class="form-group">
-                            <label for="bookPages">Pages</label>
-                            <input type="number" class="form-control" id="bookPages" value=0 min=0>
-                        </div>
-                    </div>
-    
-                    <div class="col">
-                        <label for="bookRead">Has this been read?</label>
-                        <select id="bookRead" class="form-control">
-                            <option selected>Yes</option>
-                            <option>No</option>
-                        </select>
-                    </div>
-                </div>            
+                <div class="form-group">
+                    <label for="bookPages">Pages</label>
+                    <input type="number" class="form-control" id="bookPages" value=0 min=0>
+                </div>
+                <div class="mb-3 form-check">
+                    <input type="checkbox" class="form-check-input" id="bookRead">
+                    <label class="form-check-label" for="bookRead">Has this been read?</label>
+                </div>           
                 <button type="submit" class="btn btn-primary" id="submitBtn">Submit</button>
                 <button class="btn btn-danger" id="cancelBtn">Cancel</button>
             </form>
         </div>
         
-        <div class="books my-2"></div>
+        <div class="books my-2 row"></div>
         
     </div>
 

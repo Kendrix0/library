@@ -8,6 +8,8 @@ let bookAuthor = document.querySelector('#bookAuthor');
 let bookPages = document.querySelector('#bookPages');
 let bookRead = document.querySelector('#bookRead');
 
+
+
 function Book(title, author, pages, read) {
     this.title = title,
     this.author = author,
@@ -33,6 +35,10 @@ class Library {
     removeBook(book) {
         this.books = this.books.filter((foundBook) => foundBook.title === book.title && foundBook.author === book.author)
     }
+
+    findBook(title) {
+        return this.books.find((book) => book.title === title)
+    }
 }
 
 const library = new Library();
@@ -46,7 +52,7 @@ function toggleForm() {
 }
 
 function createBook() {
-    return new Book(bookTitle.value, bookAuthor.value, bookPages.value, bookRead.value);
+    return new Book(bookTitle.value, bookAuthor.value, bookPages.value, bookRead.checked);
 }
 
 addBtn.onclick = () => {toggleForm()}
@@ -66,34 +72,68 @@ submitBtn.onclick = (e) => {
 function makeCard(book) {
     let bookDisplay = document.createElement('div');
     let displayHeader = document.createElement('header');
-    let displayInfo = document.createElement('section');
-    let displayText = document.createElement('p');
-
-    let displayTitle = document.createElement('h4');
+    let displayBtns = document.createElement('div');
+    let displayPages = document.createElement('p');
+    let readBtn = document.createElement('button');
+    let deleteBtn = document.createElement('button');
+    let displayTitle = document.createElement('h2');
     let displayAuthor = document.createElement('h5');
+    let headerInfo = document.createElement('div');
 
+
+    headerInfo.classList.add('row');
     displayHeader.classList.add('card-header', 'bg-dark',);
-    displayTitle.innerHTML = `${book.title}`
-    displayAuthor.innerHTML = `${book.author}`;
+    displayAuthor.classList.add('text-muted', 'col-auto');
+    displayPages.classList.add('text-muted', 'col-auto');
     displayHeader.appendChild(displayTitle);
-    bookDisplay.appendChild(displayHeader);
+    headerInfo.appendChild(displayAuthor);
+    headerInfo.appendChild(displayPages);
+    displayHeader.appendChild(headerInfo)
+    displayTitle.innerHTML = `${book.title}`
+    displayAuthor.innerHTML = `by ${book.author}`;
+    displayPages.innerHTML = `${book.pages} pages`;
 
+    
+    bookDisplay.appendChild(displayHeader);
     bookDisplay.classList.add('card','bg-dark','border-dark','text-white', 'my-1');
-    displayInfo.classList.add('card-body');
-    displayAuthor.classList.add('card-title');
-    displayText.classList.add('card-text');
-    displayText.innerHTML = `${book.pages} pages <br>Has been read?: ${book.read}`;
-    displayInfo.appendChild(displayAuthor);
-    displayInfo.appendChild(displayText);
-    bookDisplay.appendChild(displayInfo);
+    displayBtns.classList.add('d-grid','gap-2');
+
+    readBtn.classList.add('btn', 'btn-lg');
+    if (book.read) {
+        readBtn.innerHTML = 'Read'
+        readBtn.classList.add('btn-success')
+    } else {
+        readBtn.innerHTML = 'Not read'
+        readBtn.classList.add('btn-warning')
+    }
+    readBtn.setAttribute('type', 'button')
+
+    readBtn.onclick = (e) => {
+        const title = e.target.parentNode.parentNode.firstChild.firstChild.innerHTML
+        const book = library.findBook(title)
+        book.read = !book.read
+        console.log(book)
+        displayLibrary()
+    }
+
+    deleteBtn.innerHTML = 'Delete Book'
+    deleteBtn.classList.add('btn', 'btn-lg','btn-danger');
+    deleteBtn.setAttribute('type', 'button')
+    displayBtns.appendChild(readBtn);
+    displayBtns.appendChild(deleteBtn);
+
+    displayBtns.classList.add('d-flex','justify-content-around');
+    bookDisplay.classList.add('mx-1');
+    bookDisplay.appendChild(displayBtns);
     booksList.appendChild(bookDisplay);
+    booksList.classList.add('col-auto')
 }
 
-function displayLibrary(library) {
+function displayLibrary() {
     booksList.innerHTML = ''
     for (let book of library.books) {
         makeCard(book);
     }
 }
 
-displayLibrary(library);
+displayLibrary();
