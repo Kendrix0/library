@@ -8,19 +8,21 @@ let bookAuthor = document.querySelector('#bookAuthor');
 let bookPages = document.querySelector('#bookPages');
 let bookRead = document.querySelector('#bookRead');
 
-
+function randomNum() {
+    return Math.floor(Math.random() * 10**(Math.floor(Math.random()*10+2)));
+}
 
 function Book(title, author, pages, read) {
     this.title = title,
     this.author = author,
     this.pages = pages,
     this.read = read
-    this.id = title.toLowerCase().replaceAll(' ', '') + author.toLowerCase().replaceAll(' ','')
+    this.id = title.toLowerCase().replaceAll(' ', '') + randomNum() + author.toLowerCase().replaceAll(' ','') + randomNum()
 }
 
 class Library {
     constructor() {
-        this.books = [{title: 'The Memoirs of Hadrian', author: 'Marguerite Yourcenar', pages: 347, read: true, id: 'thememoirsofhadrianmargueriteyourcenar'}]
+        this.books = [{title: 'The Memoirs of Hadrian', author: 'Marguerite Yourcenar', pages: 347, read: true, id: 'thememoirsofhadrian143579514margueriteyourcenar85610987'}]
     }
 
     inLibrary(newBook) {
@@ -47,7 +49,7 @@ const library = new Library();
 function toggleForm() {
     bookTitle.value = '';
     bookAuthor.value = '';
-    bookPages.value = 0;
+    bookPages.value = 1;
     bookRead.value = 'Yes';
     bookForm.classList.toggle('d-none');
 }
