@@ -8,6 +8,8 @@ let bookAuthor = document.querySelector('#bookAuthor');
 let bookPages = document.querySelector('#bookPages');
 let bookRead = document.querySelector('#bookRead');
 
+let localData = window.localStorage;
+
 function randomNum() {
     return Math.floor(Math.random() * 10**(Math.floor(Math.random()*10+2)));
 }
@@ -22,7 +24,7 @@ function Book(title, author, pages, read) {
 
 class Library {
     constructor() {
-        this.books = [{title: 'The Memoirs of Hadrian', author: 'Marguerite Yourcenar', pages: 347, read: true, id: 'thememoirsofhadrian143579514margueriteyourcenar85610987'}]
+        this.books = []
     }
 
     inLibrary(newBook) {
@@ -45,6 +47,19 @@ class Library {
 }
 
 const library = new Library();
+
+function saveLocal() {
+    localData.setItem('library', JSON.stringify(library.books))
+}
+
+function loadLocal() {
+    const books = JSON.parse(localData.getItem('library'))
+    if (books) {
+        library.books = books.map(book => new Book(book.title, book.author, book.pages, book.read))
+    } else {
+        library.books = []
+    }
+}
 
 function toggleForm() {
     bookTitle.value = '';
@@ -69,7 +84,8 @@ submitBtn.onclick = (e) => {
     e.preventDefault();
     let newBook = createBook();
     library.addBook(newBook);
-    displayLibrary(library)
+    saveLocal()
+    displayLibrary(library);
 }
 
 function makeCard(book) {
@@ -113,7 +129,8 @@ function makeCard(book) {
 
     readBtn.onclick = () => {
         const foundBook = library.findBook(book.id)
-        foundBook.read = !foundBook.read
+        foundBook.read = !foundBook.read;
+        saveLocal();
         displayLibrary()
     }
 
@@ -123,6 +140,7 @@ function makeCard(book) {
 
     deleteBtn.onclick = () => {
         library.removeBook(book.id);
+        saveLocal();
         displayLibrary();
     }
 
@@ -137,12 +155,12 @@ function makeCard(book) {
 }
 
 function displayLibrary() {
-    booksList.innerHTML = ''
+    booksList.innerHTML = '';
     for (let book of library.books) {
         makeCard(book);
     }
 }
 
+loadLocal();
 displayLibrary();
-
 //Need to add in localstorage functionality
