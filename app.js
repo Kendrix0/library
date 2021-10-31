@@ -15,11 +15,12 @@ function Book(title, author, pages, read) {
     this.author = author,
     this.pages = pages,
     this.read = read
+    this.id = title.toLowerCase().replaceAll(' ', '') + author.toLowerCase().replaceAll(' ','')
 }
 
 class Library {
     constructor() {
-        this.books = [{title: 'The Memoirs of Hadrian', author: 'Marguerite Yourcenar', pages: 347, read: true}]
+        this.books = [{title: 'The Memoirs of Hadrian', author: 'Marguerite Yourcenar', pages: 347, read: true, id: 'thememoirsofhadrianmargueriteyourcenar'}]
     }
 
     inLibrary(newBook) {
@@ -32,12 +33,12 @@ class Library {
         }
     }
 
-    removeBook(book) {
-        this.books = this.books.filter((foundBook) => foundBook.title === book.title && foundBook.author === book.author)
+    removeBook(id) {
+        this.books = this.books.filter((book) => book.id !== id)
     }
 
-    findBook(title) {
-        return this.books.find((book) => book.title === title)
+    findBook(id) {
+        return this.books.find((book) => book.id === id)
     }
 }
 
@@ -90,7 +91,7 @@ function makeCard(book) {
     headerInfo.appendChild(displayPages);
     displayHeader.appendChild(headerInfo)
     displayTitle.innerHTML = `${book.title}`
-    displayAuthor.innerHTML = `by ${book.author}`;
+    displayAuthor.innerHTML = `${book.author}`;
     displayPages.innerHTML = `${book.pages} pages`;
 
     
@@ -108,17 +109,21 @@ function makeCard(book) {
     }
     readBtn.setAttribute('type', 'button')
 
-    readBtn.onclick = (e) => {
-        const title = e.target.parentNode.parentNode.firstChild.firstChild.innerHTML
-        const book = library.findBook(title)
-        book.read = !book.read
-        console.log(book)
+    readBtn.onclick = () => {
+        const foundBook = library.findBook(book.id)
+        foundBook.read = !foundBook.read
         displayLibrary()
     }
 
     deleteBtn.innerHTML = 'Delete Book'
     deleteBtn.classList.add('btn', 'btn-lg','btn-danger');
-    deleteBtn.setAttribute('type', 'button')
+    deleteBtn.setAttribute('type', 'button');
+
+    deleteBtn.onclick = () => {
+        library.removeBook(book.id);
+        displayLibrary();
+    }
+
     displayBtns.appendChild(readBtn);
     displayBtns.appendChild(deleteBtn);
 
@@ -137,3 +142,5 @@ function displayLibrary() {
 }
 
 displayLibrary();
+
+//Need to add in localstorage functionality
