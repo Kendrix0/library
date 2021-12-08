@@ -73,12 +73,6 @@ function createBook() {
     return new Book(bookTitle.value, bookAuthor.value, bookPages.value, bookRead.checked);
 }
 
-function validateForm() {
-    bookTitle.checkValidity();
-    bookAuthor.checkValidity();
-    bookPages.checkValidity();
-}
-
 addBtn.onclick = () => {toggleForm()}
 
 cancelBtn.onclick = (e) => {
