@@ -73,6 +73,12 @@ function createBook() {
     return new Book(bookTitle.value, bookAuthor.value, bookPages.value, bookRead.checked);
 }
 
+function validateForm() {
+    bookTitle.checkValidity();
+    bookAuthor.checkValidity();
+    bookPages.checkValidity();
+}
+
 addBtn.onclick = () => {toggleForm()}
 
 cancelBtn.onclick = (e) => {
@@ -81,11 +87,13 @@ cancelBtn.onclick = (e) => {
 }
 
 submitBtn.onclick = (e) => {
-    e.preventDefault();
-    let newBook = createBook();
-    library.addBook(newBook);
-    saveLocal()
-    displayLibrary(library);
+    if (bookTitle.checkValidity() && bookAuthor.checkValidity() && bookPages.checkValidity()) {
+        e.preventDefault();
+        let newBook = createBook();
+        library.addBook(newBook);
+        saveLocal();
+        displayLibrary(library);
+    }
 }
 
 function makeCard(book) {
